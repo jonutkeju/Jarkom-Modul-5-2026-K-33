@@ -22,29 +22,6 @@ Seluruh perhitungan VLSM, daftar subnet, dan rute dikerjakan pada spreadsheet be
 
 Modul 5 membangun jaringan **Operation Geofront** pada GNS3 dengan prefix kelompok `10.80.0.0/16`. Topologinya terdiri atas 17 router (Gendou sebagai router pusat, lalu Yui, Hikari, Asuka, Kaji, Misato, Shigeru, Fuyutsuki, Rei, Mari, Shinji, Kaworu, Kensuke, Ritsuko, Makoto, Toji, Maya) dan 25 node non-router yang membentuk 17 LAN serta 16 link antar-router.
 
-Soal 1 sampai 10 dikerjakan secara berurutan. Setiap soal dibangun di atas hasil soal sebelumnya.
-
-| No | Topik | Inti pekerjaan |
-| :-: | :-- | :-- |
-| 1 | VLSM | Membagi `10.80.0.0/16` menjadi 33 subnet (17 LAN + 16 link) dengan prefix terkecil yang muat, lalu menggambar pohon IP. |
-| 2 | Pengalamatan router | Memasang IP pada seluruh interface router, mengaktifkan IP forwarding, dan hanya Gendou yang memakai NAT1 (DHCP). |
-| 3 | Routing statis | Rute minimum dengan summarization, default route ke atas, dan Gendou default ke NAT1. |
-| 4 | NAT dan DNS | Internet keluar melalui `MASQUERADE` di Gendou, hanya untuk prefix internal. |
-| 5 | Firewall Gendou | `INPUT` dan `FORWARD` berkebijakan `DROP` dengan empat izin tertentu. |
-| 6 | IP statis host | IP statis, gateway, dan DNS persisten untuk 25 node non-router. |
-| 7 | Listener MAGI | `iptables` dan `netcat-traditional` pada Casper, Balthasar, Melchior dengan listener per port. |
-| 8 | Layanan web | Pen-Pen dan Tokyo3-Core menjawab pada port 80 dan 8080 memakai `nc`. |
-| 9 | Troubleshooting routing | Menemukan dan memperbaiki sabotase `break_routing.sh` pada Shigeru. |
-| 10 | Troubleshooting NAT | Menemukan dan memperbaiki sabotase `break_nat.sh` pada Misato dan Gendou. |
-
-**Pola konfigurasi persisten.** Setiap node memiliki hook `up sh /root/<nama>.sh` pada `/etc/network/interfaces`. Skrip tersebut memuat konfigurasi dasar dan diakhiri loop berikut, sehingga skrip tiap soal (`/root/soalN.sh`) otomatis ikut berjalan setiap node dinyalakan:
-
-```sh
-for n in 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20; do [ -f /root/soal$n.sh ] && sh /root/soal$n.sh; done; true
-```
-
-Paket (`iptables`, `netcat-traditional`) tidak bertahan setelah node dimatikan, sehingga Soal 7 dan 8 memasangnya kembali saat boot dengan retry loop.
-
 ---
 
 
